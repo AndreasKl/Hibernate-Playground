@@ -15,7 +15,7 @@ public class Application {
 
     public static void main(String[] args) {
         ConfigurableApplicationContext ctx = SpringApplication.run(Application.class, args);
-        
+
         ListingRepository repo = ctx.getBean(ListingRepository.class);
         repo.save(createListingWithStock("a1", "s1", createStock("a1", "s1")));
         repo.save(createListingWithStock("a2", "s1", null));
@@ -23,10 +23,8 @@ public class Application {
         EntityManager em = ctx.getBean(EntityManager.class);
         em.clear();
 
-        List<Listing> listings = repo.findAll();
-        System.out.println(listings.get(0).getStock());
-        System.out.println(listings.get(1).getStock());
-
+        ListingService service = ctx.getBean(ListingService.class);
+        service.doSth();
     }
 
     private static Listing createListingWithStock(String articleId, String storeId, Stock stock) {

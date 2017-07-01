@@ -12,6 +12,9 @@ import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 @Entity
 public class Listing {
 
@@ -28,6 +31,7 @@ public class Listing {
     @JoinColumns(value = {
             @JoinColumn(name = "article_id", referencedColumnName = "article_id", insertable = false, updatable = false, nullable = true),
             @JoinColumn(name = "store_id", referencedColumnName = "store_id", insertable = false, updatable = false, nullable = true) })
+    @NotFound(action = NotFoundAction.IGNORE)
     private Stock stock;
 
     @Version
