@@ -1,5 +1,9 @@
 package net.andreaskluth;
 
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
@@ -9,23 +13,13 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Transient;
+import javax.persistence.OneToMany;
 import javax.persistence.Version;
 
-import org.hibernate.annotations.LazyToOne;
-import org.hibernate.annotations.LazyToOneOption;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
-import org.hibernate.engine.spi.PersistentAttributeInterceptable;
-import org.hibernate.engine.spi.PersistentAttributeInterceptor;
-
 @Entity
-public class Listing implements PersistentAttributeInterceptable {
+public class Listing implements Serializable {
 
-    @Transient
-    private PersistentAttributeInterceptor interceptor;
+    private static final long serialVersionUID = 1L;
 
     @Id
     private UUID id = UUID.randomUUID();
@@ -36,13 +30,14 @@ public class Listing implements PersistentAttributeInterceptable {
     @Column(name = "store_id", nullable = true)
     private String storeId;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, optional = true)
+    /**
+     * To allow lazy loading mapped as @OneToMany instead of @OneToOne .
+     */
+    @OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
     @JoinColumns(value = {
             @JoinColumn(name = "article_id", referencedColumnName = "article_id", insertable = false, updatable = false, nullable = true),
             @JoinColumn(name = "store_id", referencedColumnName = "store_id", insertable = false, updatable = false, nullable = true) })
-    @NotFound(action = NotFoundAction.IGNORE)
-    @LazyToOne(LazyToOneOption.NO_PROXY)
-    private Stock stock;
+    private Set<Stock> stock = new HashSet<>();
 
     @Version
     private long version = 0;
@@ -71,29 +66,18 @@ public class Listing implements PersistentAttributeInterceptable {
         this.storeId = storeId;
     }
 
-    public Stock getStock() {
-        if (interceptor != null) {
-            return (Stock) interceptor.readObject(this, "stock", stock);
+    public Optional<Stock> getStock() {
+        if (stock.isEmpty()) {
+            return Optional.empty();
         }
-        return stock;
+        return stock.stream().reduce((t, u) -> {
+            throw new IllegalStateException();
+        });
     }
 
-    public void setStock(Stock stock) {
-        if (interceptor != null) {
-            this.stock = (Stock) interceptor.writeObject(this, "stock", this.stock, stock);
-            return;
-        }
-        this.stock = stock;
-    }
-
-    @Override
-    public PersistentAttributeInterceptor $$_hibernate_getInterceptor() {
-        return interceptor;
-    }
-
-    @Override
-    public void $$_hibernate_setInterceptor(PersistentAttributeInterceptor interceptor) {
-        this.interceptor = interceptor;
+    public void setStock(Optional<Stock> stock) {
+        this.stock.clear();
+        stock.ifPresent(this.stock::add);
     }
 
 }

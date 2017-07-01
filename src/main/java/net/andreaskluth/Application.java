@@ -1,6 +1,6 @@
 package net.andreaskluth;
 
-import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 
@@ -31,7 +31,7 @@ public class Application {
         Listing listing = new Listing();
         listing.setArticleId(articleId);
         listing.setStoreId(storeId);
-        listing.setStock(stock);
+        listing.setStock(Optional.ofNullable(stock));
         return listing;
     }
 
