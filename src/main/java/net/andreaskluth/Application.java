@@ -5,12 +5,10 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import net.andreaskluth.Stock.StockId;
 
-@SpringBootApplication
 public class Application {
 
     public static void main(String[] args) {
