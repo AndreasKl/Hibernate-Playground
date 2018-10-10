@@ -1,11 +1,12 @@
 package net.andreaskluth;
 
 import java.io.Serializable;
-
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
 public class Stock {
@@ -39,17 +40,20 @@ public class Stock {
 
     }
 
-    @EmbeddedId
-    private StockId id;
+    @Id
+    private String id = UUID.randomUUID().toString();
+
+    @Embedded
+    private StockId stockId;
 
     private String value;
 
     public StockId getId() {
-        return id;
+        return stockId;
     }
 
-    public void setId(StockId id) {
-        this.id = id;
+    public void setId(StockId stockId) {
+        this.stockId = stockId;
     }
 
     public String getValue() {

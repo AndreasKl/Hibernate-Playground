@@ -1,14 +1,12 @@
 package net.andreaskluth;
 
 import java.util.Optional;
-
-import javax.persistence.EntityManager;
-
+import net.andreaskluth.Stock.StockId;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import net.andreaskluth.Stock.StockId;
-
+@SpringBootApplication
 public class Application {
 
     public static void main(String[] args) {
@@ -17,9 +15,6 @@ public class Application {
         ListingRepository repo = ctx.getBean(ListingRepository.class);
         repo.save(createListingWithStock("a1", "s1", createStock("a1", "s1")));
         repo.save(createListingWithStock("a2", "s1", null));
-
-        EntityManager em = ctx.getBean(EntityManager.class);
-        em.clear();
 
         ListingService service = ctx.getBean(ListingService.class);
         service.doSth();

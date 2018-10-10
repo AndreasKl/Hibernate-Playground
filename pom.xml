@@ -13,8 +13,8 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.0.3.RELEASE</version>
-    <relativePath />
+    <version>2.0.5.RELEASE</version>
+    <relativePath/>
   </parent>
 
   <properties>
@@ -35,13 +35,11 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>postgresql</artifactId>
       <version>1.8.0</version>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 
